@@ -1,0 +1,21 @@
+version: 0.2
+
+phases:
+    install:
+        commands:
+            - echo Installing source NPM dependencies...
+            - npm install
+            - npm install -g @angular/cli
+    build:
+        commands:
+            - echo Build started on `date`
+            - ng build --prod
+    post_build:
+         commands:
+            - aws s3 sync --delete dist/codepipeline-demo-frontend s3://codepipeline-demo-frontend
+            - echo Build completed on `date`
+artifacts:
+    files:
+        - '**/*'
+    base-directory: 'dist/*'
+    discard-paths: yes
